@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Search, Menu, Globe, Phone, Mail } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -50,18 +51,18 @@ const Header = () => {
           </div>
 
           <nav className="hidden md:flex items-center gap-6">
-            <a href="#" className="text-foreground hover:text-primary transition-colors">
+            <Link to="/#services" className="text-foreground hover:text-primary transition-colors">
               الخدمات
-            </a>
-            <a href="#" className="text-foreground hover:text-primary transition-colors">
+            </Link>
+            <Link to="/#faq" className="text-foreground hover:text-primary transition-colors">
               الأسئلة الشائعة
-            </a>
-            <a href="#" className="text-foreground hover:text-primary transition-colors">
+            </Link>
+            <Link to="/#contact" className="text-foreground hover:text-primary transition-colors">
               اتصل بنا
-            </a>
-            <a href="#" className="text-foreground hover:text-primary transition-colors">
-              المساعدة
-            </a>
+            </Link>
+            <Link to="/chat" className="text-foreground hover:text-primary transition-colors">
+              المساعد الذكي
+            </Link>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -73,9 +74,11 @@ const Header = () => {
                 className="pl-10 pr-4 py-2 border border-border rounded-lg text-sm bg-background focus:ring-2 focus:ring-primary focus:border-primary"
               />
             </div>
-            <Button variant="primary">
-              دخول المواطن
-            </Button>
+            <Link to="/dashboard">
+              <Button variant="primary">
+                دخول المدير
+              </Button>
+            </Link>
             <Button variant="ghost" size="sm" className="md:hidden">
               <Menu className="h-5 w-5" />
             </Button>

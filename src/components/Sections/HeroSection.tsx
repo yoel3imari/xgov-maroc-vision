@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, MessageCircle, Search, Star, Users, Clock, Shield } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (
@@ -35,11 +36,13 @@ const HeroSection = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Button variant="hero" size="lg" className="text-lg px-8 py-4">
-              <MessageCircle className="h-5 w-5 ml-2" />
-              ابدأ المحادثة الآن
-              <ArrowLeft className="h-5 w-5 mr-2" />
-            </Button>
+            <Link to="/chat">
+              <Button variant="hero" size="lg" className="text-lg px-8 py-4">
+                <MessageCircle className="h-5 w-5 ml-2" />
+                ابدأ المحادثة الآن
+                <ArrowLeft className="h-5 w-5 mr-2" />
+              </Button>
+            </Link>
             <Button variant="government" size="lg" className="text-lg px-8 py-4">
               <Search className="h-5 w-5 ml-2" />
               استكشف الخدمات
