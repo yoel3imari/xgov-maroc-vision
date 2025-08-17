@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { 
   FileText, 
   CreditCard, 
@@ -19,12 +21,15 @@ import {
   ThumbsDown,
   Bot,
   User,
-  Clock
+  Clock,
+  Menu
 } from "lucide-react";
 
 const Chat = () => {
   const [message, setMessage] = useState("");
   const [feedbackGiven, setFeedbackGiven] = useState<{[key: number]: 'helpful' | 'unhelpful' | null}>({});
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   const services = [
     { icon: FileText, title: "الوثائق الرسمية", active: true },
@@ -86,41 +91,69 @@ const Chat = () => {
     // In a real app, this would add the message to the conversation
   };
 
+  const ServicesContent = () => (
+    <div className="space-y-2">
+      {services.map((service, index) => {
+        const IconComponent = service.icon;
+        return (
+          <Button
+            key={index}
+            variant={service.active ? "primary" : "ghost"}
+            className="w-full justify-start gap-3 h-auto p-3"
+            onClick={() => isMobile && setSidebarOpen(false)}
+          >
+            <IconComponent className="h-5 w-5" />
+            <span className="text-sm">{service.title}</span>
+          </Button>
+        );
+      })}
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
       
-      <main className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 h-[calc(100vh-12rem)]">
-          {/* Services Sidebar */}
-          <div className="lg:col-span-1">
-            <Card className="h-full">
-              <CardHeader>
-                <CardTitle className="text-lg">الخدمات المتاحة</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {services.map((service, index) => {
-                  const IconComponent = service.icon;
-                  return (
-                    <Button
-                      key={index}
-                      variant={service.active ? "primary" : "ghost"}
-                      className="w-full justify-start gap-3 h-auto p-3"
-                    >
-                      <IconComponent className="h-5 w-5" />
-                      <span className="text-sm">{service.title}</span>
-                    </Button>
-                  );
-                })}
-              </CardContent>
-            </Card>
-          </div>
+      <main className="flex flex-col h-[calc(100vh-8rem)]">
+        <div className="flex flex-1 overflow-hidden">
+          {/* Desktop Services Sidebar */}
+          {!isMobile && (
+            <div className="w-80 border-l border-border bg-card">
+              <div className="p-4">
+                <h2 className="text-lg font-semibold mb-4">الخدمات المتاحة</h2>
+                <ServicesContent />
+              </div>
+            </div>
+          )}
+
+          {/* Mobile Services Sidebar */}
+          {isMobile && (
+            <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
+              <SheetContent side="right" className="w-80">
+                <SheetHeader>
+                  <SheetTitle>الخدمات المتاحة</SheetTitle>
+                </SheetHeader>
+                <div className="mt-6">
+                  <ServicesContent />
+                </div>
+              </SheetContent>
+            </Sheet>
+          )}
 
           {/* Chat Interface */}
-          <div className="lg:col-span-3">
-            <Card className="h-full flex flex-col">
-              <CardHeader className="border-b border-border">
+          <div className="flex-1 flex flex-col overflow-hidden">
+            <Card className="flex-1 flex flex-col m-4 overflow-hidden">
+              <CardHeader className="border-b border-border flex-shrink-0">
                 <div className="flex items-center gap-3">
+                  {isMobile && (
+                    <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
+                      <SheetTrigger asChild>
+                        <Button variant="ghost" size="sm">
+                          <Menu className="h-5 w-5" />
+                        </Button>
+                      </SheetTrigger>
+                    </Sheet>
+                  )}
                   <div className="w-10 h-10 bg-gradient-morocco rounded-full flex items-center justify-center">
                     <Bot className="h-5 w-5 text-white" />
                   </div>
@@ -191,7 +224,7 @@ const Chat = () => {
               </CardContent>
 
               {/* Chat Input */}
-              <div className="border-t border-border p-4">
+              <div className="border-t border-border p-4 flex-shrink-0">
                 <div className="flex gap-2">
                   <Input
                     value={message}

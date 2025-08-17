@@ -2,8 +2,25 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Search, Menu, Globe, Phone, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 const Header = () => {
+  const [currentLanguage, setCurrentLanguage] = useState("ar");
+
+  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const lang = e.target.value;
+    setCurrentLanguage(lang);
+    
+    // Update document direction based on language
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.documentElement.lang = lang;
+  };
+
+  useEffect(() => {
+    // Set initial direction
+    document.documentElement.dir = currentLanguage === "ar" ? "rtl" : "ltr";
+    document.documentElement.lang = currentLanguage;
+  }, []);
   return (
     <header className="bg-background border-b border-border shadow-card">
       {/* Top bar */}
@@ -22,7 +39,11 @@ const Header = () => {
             </div>
             <div className="flex items-center gap-2">
               <Globe className="h-4 w-4" />
-              <select className="bg-transparent text-primary-foreground text-sm">
+              <select 
+                className="bg-transparent text-primary-foreground text-sm"
+                value={currentLanguage}
+                onChange={handleLanguageChange}
+              >
                 <option value="ar">العربية</option>
                 <option value="fr">Français</option>
                 <option value="en">English</option>
