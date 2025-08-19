@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -36,12 +36,29 @@ import {
   Clock,
   CheckCircle,
   XCircle,
-  AlertTriangle
+  AlertTriangle,
+  Globe
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 
 const Dashboard = () => {
   const [activeSection, setActiveSection] = useState("overview");
+  const [currentLanguage, setCurrentLanguage] = useState("ar");
+
+  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const lang = e.target.value;
+    setCurrentLanguage(lang);
+    
+    // Update document direction based on language
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.documentElement.lang = lang;
+  };
+
+  useEffect(() => {
+    // Set initial direction
+    document.documentElement.dir = currentLanguage === "ar" ? "rtl" : "ltr";
+    document.documentElement.lang = currentLanguage;
+  }, []);
 
   const menuItems = [
     { id: "overview", title: "نظرة عامة", icon: LayoutDashboard },
@@ -584,6 +601,18 @@ const Dashboard = () => {
               </div>
             </div>
             <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
+                <Globe className="h-4 w-4" />
+                <select 
+                  className="bg-background border border-border rounded px-2 py-1 text-sm"
+                  value={currentLanguage}
+                  onChange={handleLanguageChange}
+                >
+                  <option value="ar">العربية</option>
+                  <option value="fr">Français</option>
+                  <option value="en">English</option>
+                </select>
+              </div>
               <Badge variant="secondary">المدير</Badge>
               <Button variant="outline" size="sm">تسجيل الخروج</Button>
             </div>
