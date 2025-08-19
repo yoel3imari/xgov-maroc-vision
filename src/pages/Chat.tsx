@@ -1,12 +1,12 @@
 import { useState } from "react";
-import Header from "@/components/Layout/Header";
-import Footer from "@/components/Layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
+import LanguageDropdown from "@/components/ui/language-dropdown";
+import { Link } from "react-router-dom";
 import { 
   FileText, 
   CreditCard, 
@@ -22,7 +22,9 @@ import {
   Bot,
   User,
   Clock,
-  Menu
+  Menu,
+  LayoutDashboard,
+  UserCircle
 } from "lucide-react";
 
 const Chat = () => {
@@ -112,9 +114,46 @@ const Chat = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      {/* Chat Header */}
+      <header className="border-b border-border bg-card">
+        <div className="flex items-center justify-between px-6 py-4">
+          <div className="flex items-center gap-4">
+            <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                <span className="text-primary-foreground font-bold text-sm">X</span>
+              </div>
+              <div>
+                <div className="text-sm font-bold text-primary">X-GOV</div>
+                <div className="text-xs text-muted-foreground">المساعد الذكي</div>
+              </div>
+            </Link>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <Link to="/">
+              <Button variant="ghost" size="sm" className="gap-2">
+                <Home className="h-4 w-4" />
+                <span className="hidden sm:inline">الرئيسية</span>
+              </Button>
+            </Link>
+            <Link to="/dashboard">
+              <Button variant="ghost" size="sm" className="gap-2">
+                <LayoutDashboard className="h-4 w-4" />
+                <span className="hidden sm:inline">لوحة التحكم</span>
+              </Button>
+            </Link>
+            <Link to="/citizen">
+              <Button variant="ghost" size="sm" className="gap-2">
+                <UserCircle className="h-4 w-4" />
+                <span className="hidden sm:inline">فضائي الشخصي</span>
+              </Button>
+            </Link>
+            <LanguageDropdown />
+          </div>
+        </div>
+      </header>
       
-      <main className="flex flex-col h-[calc(100vh-8rem)]">
+      <main className="flex flex-col h-[calc(100vh-73px)]">
         <div className="flex flex-1 overflow-hidden">
           {/* Desktop Services Sidebar */}
           {!isMobile && (
@@ -245,8 +284,6 @@ const Chat = () => {
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 };
