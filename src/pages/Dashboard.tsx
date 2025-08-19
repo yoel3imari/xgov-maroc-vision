@@ -522,6 +522,24 @@ const Dashboard = () => {
 
     return (
       <Sidebar className={collapsed ? "w-16" : "w-64"} collapsible="icon">
+        {/* Sidebar Header - matches main header height */}
+        <div className="h-16 flex items-center border-b border-border px-4">
+          <NavLink 
+            to="/" 
+            className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+          >
+            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+              <span className="text-primary-foreground font-bold text-sm">X</span>
+            </div>
+            {!collapsed && (
+              <div>
+                <div className="text-sm font-bold text-primary">X-GOV</div>
+                <div className="text-xs text-muted-foreground">العودة للرئيسية</div>
+              </div>
+            )}
+          </NavLink>
+        </div>
+        
         <SidebarContent>
           <SidebarGroup>
             <SidebarGroupLabel className="text-lg font-bold text-primary px-4 py-3">
