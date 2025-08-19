@@ -550,9 +550,11 @@ const Dashboard = () => {
     );
   };
 
+  const isRTL = document.dir === 'rtl';
+
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
+      <div className={`min-h-screen flex w-full bg-background ${isRTL ? 'flex-row-reverse' : ''}`}>
         <AppSidebar />
         <main className="flex-1">
           <header className="h-16 flex items-center justify-between border-b border-border px-6">
