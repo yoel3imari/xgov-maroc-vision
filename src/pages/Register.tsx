@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import Header from "@/components/Layout/Header";
+import Footer from "@/components/Layout/Footer";
 
 const registerSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),
@@ -55,8 +57,10 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background/50 to-primary/5 p-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-background via-background/50 to-primary/5">
+      <Header />
+      <main className="flex-1 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
             Create Account
@@ -198,6 +202,8 @@ const Register = () => {
           </div>
         </CardContent>
       </Card>
+      </main>
+      <Footer />
     </div>
   );
 };
