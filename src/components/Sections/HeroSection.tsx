@@ -2,8 +2,18 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, MessageCircle, Search, Star, Users, Clock, Shield } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTranslations } from "@/lib/translations";
 
 const HeroSection = () => {
+  const currentLanguage = document.documentElement.lang || 'ar';
+  const t = useTranslations(currentLanguage);
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
   return (
     <section className="relative bg-gradient-subtle py-20 lg:py-32 overflow-hidden">
       {/* Background decorative elements */}
@@ -15,37 +25,44 @@ const HeroSection = () => {
           {/* Badge */}
           <Badge variant="secondary" className="mb-6 text-xs font-medium">
             <Star className="h-3 w-3 mr-1 text-accent fill-current" />
-            منصة الخدمات الحكومية الذكية الأولى في المغرب
+            {currentLanguage === 'ar' ? 'منصة الخدمات الحكومية الذكية الأولى في المغرب' : 
+             currentLanguage === 'fr' ? 'Première plateforme de services gouvernementaux intelligents au Maroc' :
+             'Morocco\'s first smart government services platform'}
           </Badge>
 
           {/* Main heading */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6 leading-tight">
             <span className="bg-gradient-morocco bg-clip-text text-transparent">
-              X-GOV
+              {t.heroTitle}
             </span>
             <br />
             <span className="text-2xl md:text-3xl lg:text-4xl text-muted-foreground">
-              خدمات حكومية ذكية بنقرة واحدة
+              {t.heroSubtitle}
             </span>
           </h1>
 
           {/* Description */}
           <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
-            احصل على جميع الخدمات الحكومية المغربية من مكان واحد. مساعد ذكي يفهم احتياجاتك ويوجهك خطوة بخطوة لإنجاز معاملاتك بسرعة وسهولة.
+            {t.heroDescription}
           </p>
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <Link to="/chat">
-              <Button variant="hero" size="lg" className="text-lg px-8 py-4">
+              <Button variant="default" size="lg" className="text-lg px-8 py-4 bg-primary text-primary-foreground hover:bg-primary/90">
                 <MessageCircle className="h-5 w-5 ml-2" />
-                ابدأ المحادثة الآن
+                {t.startChat}
                 <ArrowLeft className="h-5 w-5 mr-2" />
               </Button>
             </Link>
-            <Button variant="government" size="lg" className="text-lg px-8 py-4">
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="text-lg px-8 py-4"
+              onClick={() => scrollToSection('services')}
+            >
               <Search className="h-5 w-5 ml-2" />
-              استكشف الخدمات
+              {t.exploreServices}
             </Button>
           </div>
 

@@ -14,8 +14,17 @@ import {
   Clock,
   Star
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useTranslations } from "@/lib/translations";
 
 const ServicesGrid = () => {
+  const navigate = useNavigate();
+  const currentLanguage = document.documentElement.lang || 'ar';
+  const t = useTranslations(currentLanguage);
+
+  const handleServiceClick = (serviceTitle: string) => {
+    navigate(`/chat?service=${encodeURIComponent(serviceTitle)}`);
+  };
   const services = [
     {
       icon: FileText,
@@ -76,17 +85,17 @@ const ServicesGrid = () => {
   ];
 
   return (
-    <section className="py-20 bg-background">
+    <section id="services" className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <Badge variant="secondary" className="mb-4">
-            جميع الخدمات في مكان واحد
+            {t.servicesSubtitle}
           </Badge>
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            خدمات شاملة لجميع احتياجاتك
+            {t.servicesTitle}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            اكتشف مجموعة شاملة من الخدمات الحكومية المغربية المصممة لتوفير الوقت والجهد
+            {t.servicesDescription}
           </p>
         </div>
 
@@ -96,7 +105,8 @@ const ServicesGrid = () => {
             return (
               <Card 
                 key={index} 
-                className="group hover:shadow-government transition-all duration-300 hover:-translate-y-1 border-border bg-card"
+                className="group hover:shadow-government transition-all duration-300 hover:-translate-y-1 border-border bg-card cursor-pointer"
+                onClick={() => handleServiceClick(service.title)}
               >
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between mb-2">
@@ -106,7 +116,7 @@ const ServicesGrid = () => {
                     {service.popular && (
                       <Badge variant="secondary" className="text-xs">
                         <Star className="h-3 w-3 mr-1 text-accent fill-current" />
-                        شائع
+                        {t.popular}
                       </Badge>
                     )}
                   </div>
@@ -134,8 +144,8 @@ const ServicesGrid = () => {
         </div>
 
         <div className="text-center">
-          <Button variant="government" size="lg">
-            عرض جميع الخدمات
+          <Button variant="primary" size="lg" onClick={() => navigate('/chat')}>
+            {t.viewAllServices}
             <ArrowLeft className="h-4 w-4 mr-2" />
           </Button>
         </div>

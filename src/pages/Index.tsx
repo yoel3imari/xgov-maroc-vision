@@ -6,6 +6,7 @@ import FeaturesSection from "@/components/Sections/FeaturesSection";
 import FAQSection from "@/components/Sections/FAQSection";
 import PartnersSection from "@/components/Sections/PartnersSection";
 import ContactSection from "@/components/Sections/ContactSection";
+import LanguageSwitcher from "@/components/ui/language-switcher";
 
 const Index = () => {
   return (

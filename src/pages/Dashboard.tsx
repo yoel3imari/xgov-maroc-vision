@@ -37,37 +37,29 @@ import {
   CheckCircle,
   XCircle,
   AlertTriangle,
-  Globe
+  LogOut
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
+import LanguageSwitcher from "@/components/ui/language-switcher";
+import { useTranslations } from "@/lib/translations";
 
 const Dashboard = () => {
   const [activeSection, setActiveSection] = useState("overview");
   const [currentLanguage, setCurrentLanguage] = useState("ar");
+  const t = useTranslations(currentLanguage);
 
-  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const lang = e.target.value;
-    setCurrentLanguage(lang);
-    
-    // Update document direction based on language
-    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
-    document.documentElement.lang = lang;
+  const handleLanguageChange = (language: any) => {
+    setCurrentLanguage(language.code);
   };
 
-  useEffect(() => {
-    // Set initial direction
-    document.documentElement.dir = currentLanguage === "ar" ? "rtl" : "ltr";
-    document.documentElement.lang = currentLanguage;
-  }, []);
-
   const menuItems = [
-    { id: "overview", title: "نظرة عامة", icon: LayoutDashboard },
-    { id: "services", title: "إدارة الخدمات", icon: FileText },
-    { id: "faq", title: "الأسئلة الشائعة", icon: HelpCircle },
-    { id: "security", title: "الأمان", icon: Shield },
-    { id: "users", title: "المستخدمين", icon: Users },
-    { id: "inbox", title: "صندوق الوارد", icon: Inbox },
-    { id: "settings", title: "الإعدادات", icon: Settings }
+    { id: "overview", title: t.overview, icon: LayoutDashboard },
+    { id: "services", title: t.servicesManagement, icon: FileText },
+    { id: "faq", title: t.faqManagement, icon: HelpCircle },
+    { id: "security", title: t.security, icon: Shield },
+    { id: "users", title: t.users, icon: Users },
+    { id: "inbox", title: t.inbox, icon: Inbox },
+    { id: "settings", title: t.settings, icon: Settings }
   ];
 
   const mockServices = [
@@ -539,11 +531,11 @@ const Dashboard = () => {
 
     return (
       <Sidebar className={collapsed ? "w-16" : "w-64"} collapsible="icon">
-        {/* Sidebar Header - matches main header height */}
+        {/* Sidebar Header with centered logo when collapsed */}
         <div className="h-16 flex items-center border-b border-border px-4">
           <NavLink 
             to="/" 
-            className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+            className={`flex items-center hover:opacity-80 transition-opacity ${collapsed ? 'justify-center w-full' : 'gap-2'}`}
           >
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
               <span className="text-primary-foreground font-bold text-sm">X</span>
@@ -551,7 +543,9 @@ const Dashboard = () => {
             {!collapsed && (
               <div>
                 <div className="text-sm font-bold text-primary">X-GOV</div>
-                <div className="text-xs text-muted-foreground">العودة للرئيسية</div>
+                <div className="text-xs text-muted-foreground">
+                  {currentLanguage === 'ar' ? 'العودة للرئيسية' : currentLanguage === 'fr' ? 'Accueil' : 'Home'}
+                </div>
               </div>
             )}
           </NavLink>
@@ -560,7 +554,7 @@ const Dashboard = () => {
         <SidebarContent>
           <SidebarGroup>
             <SidebarGroupLabel className="text-lg font-bold text-primary px-4 py-3">
-              {!collapsed && "لوحة التحكم"}
+              {!collapsed && (currentLanguage === 'ar' ? 'لوحة التحكم' : currentLanguage === 'fr' ? 'Tableau de bord' : 'Dashboard')}
             </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
@@ -589,7 +583,10 @@ const Dashboard = () => {
 
   return (
     <SidebarProvider>
-      <div className={`min-h-screen flex w-full bg-background ${isRTL ? 'flex-row-reverse' : ''}`}>
+      <div 
+        className="min-h-screen flex w-full bg-background" 
+        data-sidebar="wrapper"
+      >
         <AppSidebar />
         <main className="flex-1">
           <header className="h-16 flex items-center justify-between border-b border-border px-6">
@@ -597,24 +594,21 @@ const Dashboard = () => {
               <SidebarTrigger />
               <div>
                 <h1 className="text-xl font-bold text-foreground">X-GOV Admin</h1>
-                <p className="text-sm text-muted-foreground">لوحة تحكم المدير</p>
+                <p className="text-sm text-muted-foreground">
+                  {currentLanguage === 'ar' ? 'لوحة تحكم المدير' : currentLanguage === 'fr' ? 'Panneau d\'administration' : 'Admin Dashboard'}
+                </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2">
-                <Globe className="h-4 w-4" />
-                <select 
-                  className="bg-background border border-border rounded px-2 py-1 text-sm"
-                  value={currentLanguage}
-                  onChange={handleLanguageChange}
-                >
-                  <option value="ar">العربية</option>
-                  <option value="fr">Français</option>
-                  <option value="en">English</option>
-                </select>
-              </div>
-              <Badge variant="secondary">المدير</Badge>
-              <Button variant="outline" size="sm">تسجيل الخروج</Button>
+              <LanguageSwitcher 
+                variant="compact" 
+                onLanguageChange={handleLanguageChange}
+              />
+              <Badge variant="secondary">{currentLanguage === 'ar' ? 'المدير' : currentLanguage === 'fr' ? 'Admin' : 'Admin'}</Badge>
+              <Button variant="outline" size="sm" className="gap-2">
+                <LogOut className="h-4 w-4" />
+                {currentLanguage === 'ar' ? 'تسجيل الخروج' : currentLanguage === 'fr' ? 'Déconnexion' : 'Logout'}
+              </Button>
             </div>
           </header>
           <div className="p-6">

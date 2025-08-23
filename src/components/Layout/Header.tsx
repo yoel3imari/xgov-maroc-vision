@@ -1,26 +1,25 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Search, Menu, Globe, Phone, Mail } from "lucide-react";
+import { Search, Menu, Phone, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import LanguageSwitcher from "@/components/ui/language-switcher";
+import { useTranslations } from "@/lib/translations";
 
 const Header = () => {
   const [currentLanguage, setCurrentLanguage] = useState("ar");
+  const t = useTranslations(currentLanguage);
 
-  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const lang = e.target.value;
-    setCurrentLanguage(lang);
-    
-    // Update document direction based on language
-    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
-    document.documentElement.lang = lang;
+  const handleLanguageChange = (language: any) => {
+    setCurrentLanguage(language.code);
   };
 
-  useEffect(() => {
-    // Set initial direction
-    document.documentElement.dir = currentLanguage === "ar" ? "rtl" : "ltr";
-    document.documentElement.lang = currentLanguage;
-  }, []);
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
   return (
     <header className="bg-background border-b border-border shadow-card">
       {/* Top bar */}
@@ -37,18 +36,10 @@ const Header = () => {
                 <span>contact@xgov.ma</span>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <Globe className="h-4 w-4" />
-              <select 
-                className="bg-transparent text-primary-foreground text-sm"
-                value={currentLanguage}
-                onChange={handleLanguageChange}
-              >
-                <option value="ar">العربية</option>
-                <option value="fr">Français</option>
-                <option value="en">English</option>
-              </select>
-            </div>
+            <LanguageSwitcher 
+              variant="minimal" 
+              onLanguageChange={handleLanguageChange}
+            />
           </div>
         </div>
       </div>
@@ -72,17 +63,26 @@ const Header = () => {
           </div>
 
           <nav className="hidden md:flex items-center gap-6">
-            <Link to="/#services" className="text-foreground hover:text-primary transition-colors">
-              الخدمات
-            </Link>
-            <Link to="/#faq" className="text-foreground hover:text-primary transition-colors">
-              الأسئلة الشائعة
-            </Link>
-            <Link to="/#contact" className="text-foreground hover:text-primary transition-colors">
-              اتصل بنا
-            </Link>
+            <button 
+              onClick={() => scrollToSection('services')} 
+              className="text-foreground hover:text-primary transition-colors"
+            >
+              {t.services}
+            </button>
+            <button 
+              onClick={() => scrollToSection('faq')} 
+              className="text-foreground hover:text-primary transition-colors"
+            >
+              {t.faq}
+            </button>
+            <button 
+              onClick={() => scrollToSection('contact')} 
+              className="text-foreground hover:text-primary transition-colors"
+            >
+              {t.contact}
+            </button>
             <Link to="/chat" className="text-foreground hover:text-primary transition-colors">
-              المساعد الذكي
+              {t.smartAssistant}
             </Link>
           </nav>
 
@@ -97,7 +97,7 @@ const Header = () => {
             </div>
             <Link to="/dashboard">
               <Button variant="primary">
-                دخول المدير
+                {t.adminLogin}
               </Button>
             </Link>
             <Button variant="ghost" size="sm" className="md:hidden">

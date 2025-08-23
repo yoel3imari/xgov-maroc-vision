@@ -9,7 +9,7 @@ import { MapPin, Phone, Mail, Clock, MessageCircle, Send } from "lucide-react";
 
 const ContactSection = () => {
   return (
-    <section className="py-20 bg-background">
+    <section id="contact" className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <Badge variant="secondary" className="mb-4">
@@ -167,7 +167,7 @@ const ContactSection = () => {
                     <Send className="h-4 w-4 ml-2" />
                     إرسال الرسالة
                   </Button>
-                  <Button variant="government" className="flex-1">
+                  <Button variant="outline" className="flex-1">
                     محادثة مباشرة
                   </Button>
                 </div>

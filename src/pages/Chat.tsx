@@ -5,8 +5,9 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
-import LanguageDropdown from "@/components/ui/language-dropdown";
-import { Link } from "react-router-dom";
+import LanguageSwitcher from "@/components/ui/language-switcher";
+import { useTranslations } from "@/lib/translations";
+import { Link, useSearchParams } from "react-router-dom";
 import { 
   FileText, 
   CreditCard, 
@@ -31,24 +32,35 @@ const Chat = () => {
   const [message, setMessage] = useState("");
   const [feedbackGiven, setFeedbackGiven] = useState<{[key: number]: 'helpful' | 'unhelpful' | null}>({});
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [currentLanguage, setCurrentLanguage] = useState("ar");
+  const [searchParams] = useSearchParams();
   const isMobile = useIsMobile();
+  const t = useTranslations(currentLanguage);
+
+  const selectedService = searchParams.get('service');
+
+  const handleLanguageChange = (language: any) => {
+    setCurrentLanguage(language.code);
+  };
 
   const services = [
-    { icon: FileText, title: "الوثائق الرسمية", active: true },
-    { icon: CreditCard, title: "الضرائب والرسوم", active: false },
-    { icon: GraduationCap, title: "التعليم والمنح", active: false },
-    { icon: Heart, title: "الصحة والتأمين", active: false },
-    { icon: Briefcase, title: "العمل والتوظيف", active: false },
-    { icon: Car, title: "النقل والمواصلات", active: false },
-    { icon: Home, title: "الإسكان والعقار", active: false },
-    { icon: Scale, title: "العدالة والقانون", active: false }
+    { icon: FileText, title: "الوثائق الرسمية", active: selectedService === "الوثائق الرسمية" || (!selectedService && true) },
+    { icon: CreditCard, title: "الضرائب والرسوم", active: selectedService === "الضرائب والرسوم" },
+    { icon: GraduationCap, title: "التعليم والمنح", active: selectedService === "التعليم والمنح" },
+    { icon: Heart, title: "الصحة والتأمين", active: selectedService === "الصحة والتأمين" },
+    { icon: Briefcase, title: "العمل والتوظيف", active: selectedService === "العمل والتوظيف" },
+    { icon: Car, title: "النقل والمواصلات", active: selectedService === "النقل والمواصلات" },
+    { icon: Home, title: "الإسكان والعقار", active: selectedService === "الإسكان والعقار" },
+    { icon: Scale, title: "العدالة والقانون", active: selectedService === "العدالة والقانون" }
   ];
 
   const mockConversation = [
     {
       id: 1,
       type: "bot" as const,
-      message: "مرحباً بك في X-GOV! أنا مساعدك الذكي للخدمات الحكومية المغربية. كيف يمكنني مساعدتك اليوم؟",
+      message: selectedService 
+        ? `مرحباً بك! لقد اخترت خدمة "${selectedService}". كيف يمكنني مساعدتك في هذه الخدمة؟`
+        : "مرحباً بك في X-GOV! أنا مساعدك الذكي للخدمات الحكومية المغربية. كيف يمكنني مساعدتك اليوم؟",
       timestamp: "10:30"
     },
     {
@@ -148,7 +160,10 @@ const Chat = () => {
                 <span className="hidden sm:inline">فضائي الشخصي</span>
               </Button>
             </Link>
-            <LanguageDropdown />
+            <LanguageSwitcher 
+              variant="compact" 
+              onLanguageChange={handleLanguageChange}
+            />
           </div>
         </div>
       </header>

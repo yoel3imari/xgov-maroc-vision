@@ -44,7 +44,7 @@ const FAQSection = () => {
   };
 
   return (
-    <section className="py-20 bg-background">
+    <section id="faq" className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <Badge variant="secondary" className="mb-4">
@@ -104,7 +104,7 @@ const FAQSection = () => {
               <Button variant="primary">
                 تحدث مع المساعد الذكي
               </Button>
-              <Button variant="government">
+              <Button variant="outline">
                 اتصل بفريق الدعم
                 <ArrowLeft className="h-4 w-4 mr-2" />
               </Button>
